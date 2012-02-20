@@ -22,7 +22,10 @@ python process_loans.py #
 
 Running the R script to generate the image
 
-R --file=kiva.R 
+You can pass the first argument to the script as the filepath
+Otherwise it will use the current directory
+
+RScript kiva.R ~/kiva-map
 
 This will generate a new kiva.png file in the images folder
 

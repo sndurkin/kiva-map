@@ -5,9 +5,14 @@ library(Cairo)
 library(png)
 library(bigmemory)
 
+# Command line options
+filepath <- gsub(" ", "", commandArgs(trailingOnly = T), fixed=TRUE)
+if (length(filepath) < 1) {
+  filepath <- gsub(" ", "", getwd(), fixed=TRUE)
+}
 # Initialize global variables.
-ABSOLUTE_DATA_PATH <- "C:/Projects/kiva-map/data/"
-FILE_PATH <- "C:/Projects/kiva-map/images/kiva.png"
+ABSOLUTE_DATA_PATH <- paste(filepath, "/data/")
+FILE_PATH <- paste(ABSOLUTE_DATA_PATH, "/images/kiva.png")
 LENDER_LOCATIONS_FILE_NAME <- "lender_locations"
 LOAN_LOCATIONS_FILE_NAME <- "loan_locations"
 LENDER_LOANS_FILE_NAME <- "lender_loans"
