@@ -1,1 +1,40 @@
 This project holds code used to generate world map visualizations using data from Kiva. It has the code to generate the main Kiva map using the data from their snapshot, as well as custom maps for a given lender or lending team.
+
+Installation steps for Ubuntu 11.10 
+
+Downloaded this repo https://github.com/sndurkin/kiva-map.git
+Downloaded a Kiva data snapshot from http://build.kiva.org in JSON format
+http://s3.kiva.org/snapshots/kiva_ds_json.zip
+Unzip it in the kiva-map directory
+Install  R via sudo apt-get install r-base
+Install libxt via sudo apt-get install libxt-dev
+Install Cairo graphics library via sudo apt-get install libcairo2-dev
+Install R packages (R, then within R, install.packages("maps,mapproj,geosphere,Cairo,png,bigmemory"):
+Create a data folder and copy the csv files to it
+Changed the absolute file paths in the various R files to your install 
+(e.g., ~/sandbox/kiva-map/data
+
+Running the python script to generate the csv files 
+
+python process_loans.py #
+
+(where # is the number you wish to process)
+
+Running the R script to generate the image
+
+You can pass the first argument to the script as the filepath
+Otherwise it will use the current directory
+
+RScript kiva.R ~/kiva-map
+
+This will generate a new kiva.png file in the images folder
+
+Generating an image for your team's last 20 loans
+
+wget -O loans/2.json http://api.kivaws.org/v1/teams/#/loans.json
+(where # is your Team's number, e.g. Reddit is 2498)
+python process_loans.py 1
+(Wait for output, it will take a while...)
+R --file=kiva.R
+This produces a new images/kiva.png with your Team's loans visualized
+
