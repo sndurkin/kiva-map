@@ -1,1 +1,1 @@
-README
+This project holds code used to generate world map visualizations using data from Kiva. It has the code to generate the main Kiva map using the data from their snapshot, as well as custom maps for a given lender or lending team.
