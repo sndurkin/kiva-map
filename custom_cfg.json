@@ -1,0 +1,25 @@
+{
+  "backgroundColor": "#000000",
+  "continentsColor": "#191919",
+  
+  "imgWidth": 4096,
+  "imgHeight": 2048,
+  
+  "lenderPoints": {
+    "darkestColor": "#1140fa",
+    "lightestColor": "#859dfc",
+    "size": 0.7
+  },
+  
+  "loanPoints": {
+    "darkestColor": "#d5d052",
+    "lightestColor": "#8e8a22",
+    "size": 0.7
+  },
+  
+  "lenderLoanLines": {
+    "darkestColor": "#17540d",
+    "lightestColor": "#2b9e18",
+    "size": 1.0
+  }
+}
