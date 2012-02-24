@@ -1,4 +1,4 @@
-import  sys, urllib, json, csv, time, subprocess, os
+import  sys, urllib, json, csv, time, subprocess, os, re
 from    math import *
 
 #####################################################################
@@ -25,17 +25,32 @@ from    math import *
 SECONDS_BETWEEN_KIVA_QUERIES = 3
 SECONDS_BETWEEN_GMAPS_QUERIES = 1
 
+# [locations] is a map of lender location str to lat/lon point. These are
+# saved locally so we can minimize the number of queries to the Google Maps API.
+# Invalid locations are also stored (value is -1).
+locations = {}
+
 
 def read_kiva_data(url):
     stream = urllib.urlopen(url)
-    dataStr = stream.read()
+    data_str = stream.read()
+    data_str = re.sub('\\\\\'', '\'', data_str)
+
     try:
-        data = json.loads(dataStr)
+        data = json.loads(data_str)
         if 'code' in data and 'message' in data:
             raise Exception(u'{0}: {1}'.format(data['code'], data['message']))
         return data
     except ValueError:
-        raise Exception(u'Couldn\'t parse JSON: {0}'.format(dataStr))
+        raise Exception(u'Couldn\'t parse JSON: {0}'.format(data_str))
+
+
+def raise_invalid_location(indent, lender_loc):
+    try:
+        msg = u'{0}"{1}" is not a valid location according to Google Maps'.format(indent, lender_loc)
+    except UnicodeEncodeError:
+        msg = u'{0}(cannot be displayed) is not a valid location according to Google Maps'.format(indent)
+    raise Exception(msg)
 
 
 def fetch_lender_location(indent, lender):
@@ -44,13 +59,20 @@ def fetch_lender_location(indent, lender):
     
     lender_loc = lender['whereabouts'].lower()
     if 'country_code' in lender:
-        lender_loc += ', ' + lender['country_code'].upper()
+        lender_loc += ', ' + lender['country_code'].lower()
     
     # Remove some URLs commonly found in the lender locations. TODO: use regex...
     lender_loc = lender_loc.replace('http://www.kivafriends.org', '')
     lender_loc = lender_loc.replace('http://kivafriends.org', '')
     lender_loc = lender_loc.replace('www.kivafriends.org', '')
     lender_loc = lender_loc.replace('kivafriends.org', '')
+    
+    # Check the cache first.
+    if lender_loc in locations:
+        if locations[lender_loc] == -1:
+            raise_invalid_location(indent, lender_loc)
+        
+        return locations[lender_loc]            
     
     # Fetch the lender's lat/lon from Google Maps.
     try:
@@ -63,16 +85,15 @@ def fetch_lender_location(indent, lender):
     loc_data = json.loads(loc_url.read())
     if 'Placemark' not in loc_data:
         # The address was not found by Google Maps, so alert the user and exit.
-        try:
-            msg = u'{0}"{1}" is not a valid location according to Google Maps'.format(indent, lender_loc)
-        except UnicodeEncodeError:
-            msg = u'{0}(cannot be displayed) is not a valid location according to Google Maps'.format(indent)
-        raise Exception(msg)
+        locations[lender_loc] = -1
+        raise_invalid_location(indent, lender_loc)
     
     coords = loc_data['Placemark'][0]['Point']['coordinates']
     
     # The lender location format: "<lat> <lon>"
-    return '{0} {1}'.format(coords[1], coords[0])
+    location = '{0} {1}'.format(coords[1], coords[0])
+    locations[lender_loc] = location
+    return location
 
 
 def fetch_lender_data(lender_id):
@@ -121,6 +142,8 @@ def fetch_lender_data(lender_id):
                 lender_loan_data[lender_loc][loan_loc] = 1
             else:
                 lender_loan_data[lender_loc][loan_loc] += 1
+    
+    write_locations()
     
     return (lender_locations, loan_locations, lender_loan_data)
 
@@ -193,6 +216,8 @@ def fetch_data(is_individual_lender, id):
                             lender_locations[lender_loc] += 1
                     except Exception, e:
                         print u'   -> [Warning] Could not process lender {0}: {1}'.format(lender['uid'], e)
+        
+        write_locations()
         
         loan_locations = {}
         lender_loan_data = {}
@@ -276,6 +301,31 @@ def haversine(lat1, lon1, lat2, lon2):
     return km
 
 
+def write_locations():
+    try:
+        os.mkdir('data')
+    except:
+        pass
+    
+    # Write the saved locations.
+    file = open('data/custom_locations.json', 'wb')
+    file.write(json.dumps(locations))
+    file.close()  
+
+
+def read_locations():
+    # locations
+    try:
+        file = open('data/custom_locations.json', 'r')
+        global locations
+        locations = json.loads(file.read())
+        file.close()
+    except IOError:
+        pass
+    except:
+        print 'Couldn\'t parse custom_locations.json'
+
+
 def write_data(id, lender_locations, loan_locations, lender_loan_data):
     try:
         os.mkdir('data')
@@ -316,7 +366,7 @@ def write_data(id, lender_locations, loan_locations, lender_loan_data):
                 haversine(lender_loc_split[0], lender_loc_split[2], loan_loc_split[0], loan_loc_split[2]),
                 count
             ])
-    file.close()
+    file.close()  
 
 
 def is_arg_valid(arg, value1, value2):
@@ -350,6 +400,8 @@ def main(*args):
     is_individual_lender = args[1].upper() == 'L'
     id = args[2]
     force_fetch_data = args[3].upper() == 'Y'
+    
+    read_locations()
     
     try:
         if force_fetch_data == True or data_already_exists(id) == False:
