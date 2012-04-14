@@ -1,0 +1,79 @@
+<html>
+  <head>
+    <title>About</title>
+    <style>
+      body {
+        background: #003f66; /* Old browsers */
+        background: -moz-radial-gradient(center, ellipse cover,  #003f66 0%, #002033 100%); /* FF3.6+ */
+        background: -webkit-radial-gradient(center, ellipse cover,  #003f66 0%,#002033 100%); /* Chrome10+,Safari5.1+ */
+        background: radial-gradient(center, ellipse cover,  #003f66 0%,#002033 100%); /* W3C */
+        color: #fff;
+        font-family: Arial;
+        font-size: 110%;
+      }
+      
+      #content {
+        width: 50em;
+        margin: 2.5em auto 0 auto;
+      }
+      
+      #footer {
+        font-size: 14px;
+        text-align: center;
+        position: absolute;
+        bottom: 1em;
+        left: 50%;
+        width: 20em;
+        margin-left: -10em;
+        color: #999;
+      }
+      #footer a {
+        color: #fff;
+        text-decoration: none;
+        font-family: Arial;
+      }
+      #footer a:hover {
+        text-decoration: underline;
+      }
+      
+      a {
+        color: #b2cadf;
+        text-decoration: none;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+      
+      .map {
+        background: url(https://github.com/sndurkin/kiva-map/raw/master/images/kiva-small.png);
+        box-shadow: 0 0 25px rgba(0, 0, 0, .5);
+        width: 720px;
+        height: 360px;
+        margin: 0 auto;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="content">
+      <p>
+        <a href="index.html">This page</a> is used to track the progress of a Python script whose 
+        purpose is to incrementally acquire and process all lender-loan data from <a href="http://www.kiva.org/">Kiva</a>.
+        It goes through each loan in the Kiva data snapshot (there's about 412k of them) and fetches all its 
+        lenders from the Kiva API. Then it stores the lenders, loans, and the lender-loan connections into files.
+      </p>
+        
+      <p>
+        The files are then read by an R script which plots the lenders and loans and draws lines between
+        them to create a Kiva world map visualization. <a href="#">I did this previously</a> with an outdated snapshot, 
+        and now that it's been recently updated, I'm updating the visualization.
+      </p>
+      
+      <p>
+        Previous map: <div class="map"></div>
+      </p>
+    </div>
+    <div id="footer">
+      <a href="index.html">main</a> |
+      <a href="mailto:sndurkin@gmail.com">suggestions</a>
+    </div>
+</html>
