@@ -1,0 +1,117 @@
+<html>
+  <head>
+    <title>Hello</title>
+    <style>
+      
+      body {
+        background: #003f66; /* Old browsers */
+        background: -moz-radial-gradient(center, ellipse cover,  #003f66 0%, #002033 100%); /* FF3.6+ */
+        background: -webkit-radial-gradient(center, ellipse cover,  #003f66 0%,#002033 100%); /* Chrome10+,Safari5.1+ */
+        background: radial-gradient(center, ellipse cover,  #003f66 0%,#002033 100%); /* W3C */
+      }
+      
+      #content-wrapper {
+        position: relative;
+        width: 100%;
+        height: 100%;
+      }
+      
+      #content {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 40em;
+        height: 20em;
+        margin-left: -20em;
+        margin-top: -10em;
+      }
+      
+      #progress-bar, #progress {
+        position: absolute;
+        top: 4.5em;
+        height: 2.5em;
+        border-radius: 0.5em;
+      }
+      #progress-bar {
+        width: 100%;
+        background-color: #282828;
+        box-shadow: inset 0 0.1em 0.4em 0 rgba(0, 0, 0, 0.7), 0 0.1em 0 0 rgba(255, 255, 255, 0.15);
+      }
+      #progress {
+        width: 43%;
+        background: -webkit-linear-gradient(#4db03e, #2c6523);
+        border-radius: 0.5em;
+      }
+      
+      #stats, #status {
+        position: absolute;
+        font-size: 140%;
+        font-family: Consolas;
+      }
+      #stats {
+        top: 6em;
+      }
+      #status {
+        top: 0;
+      }
+      
+      .stat {
+        margin-top: 0.8em;
+        width: 100%;
+        overflow: auto;
+      }
+      .stat .label, .stat .value {
+        float: left;
+      }
+      .stat .label {
+        width: 13em;
+        color: #999;
+        text-align: right;
+      }
+      .stat .value {
+        padding-left: 1em;
+        color: #fff;
+      }
+      
+      #status .value {
+        font-weight: bold;
+      }
+      #status .running {
+        color: #259917;
+      }
+      #status .stopped {
+        color: #ee1d06;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="content-wrapper">
+      <div id="content">
+        <div id="progress-bar"></div>
+        <div id="progress"></div>
+        <div id="status" class="stat">
+          <div class="label">Status:</div>
+          <div class="value running">Running</div>
+        </div>
+        <div id="stats">
+          <div class="stat">
+            <div class="label">Progress:</div>
+            <div class="value">43%</div>
+          </div>
+          <div class="stat">
+            <div class="label">Loans processed:</div>
+            <div class="value">345,812</div>
+          </div>
+          <div class="stat">
+            <div class="label">Unique lender locations:</div>
+            <div class="value">19,345</div>
+          </div>
+          <div class="stat">
+            <div class="label">Unique loan locations:</div>
+            <div class="value">2,429</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
