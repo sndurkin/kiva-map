@@ -117,7 +117,9 @@
               window.location.reload();
             }
             else {
-              document.getElementById('next-update').innerHTML = Math.floor((refreshTime - currentTime) / 60000) + ' minutes';
+              var minutes = Math.floor((refreshTime - currentTime) / 60000) + 1;
+              var str = minutes + ' minute' + (minutes != 1 ? 's' : '');
+              document.getElementById('next-update').innerHTML = str;
             }
             
             f(60000);
