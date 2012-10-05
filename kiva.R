@@ -11,14 +11,16 @@ if (length(filepath) < 1) {
   filepath <- gsub(" ", "", getwd(), fixed=TRUE)
 }
 # Initialize global variables.
-ABSOLUTE_DATA_PATH <- paste(filepath, "/data/")
-FILE_PATH <- paste(ABSOLUTE_DATA_PATH, "/images/kiva.png")
+ABSOLUTE_DATA_PATH <- paste(filepath, "/data/", sep="")
+FILE_PATH <- paste(ABSOLUTE_DATA_PATH, "/images/kiva.png", sep="")
 LENDER_LOCATIONS_FILE_NAME <- "lender_locations"
 LOAN_LOCATIONS_FILE_NAME <- "loan_locations"
 LENDER_LOANS_FILE_NAME <- "lender_loans"
 DISTANCE_RANGE_NUM <- 10
 WIDTH <- 4096
 HEIGHT <- 2048
+#WIDTH <- 16384
+#HEIGHT <- 8192
 MAX_LINES_TO_DRAW <- 100000
 
 
@@ -89,7 +91,7 @@ for(i in 1:len) {
     
     pair <- lenderLoanData[i,]
     
-    colIndex <- ceiling((pair[9] / maxSortValue) * length(lineColors))
+    colIndex <- ceiling((pair[9] / maxSortValue)^2.5 * length(lineColors))
     color <- lineColors[colIndex]
     
     inter <- gcIntermediate(c(pair[6], pair[5]), c(pair[8], pair[7]), n=300, breakAtDateLine=TRUE, addStartEnd=TRUE)

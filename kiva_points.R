@@ -5,8 +5,8 @@ library(Cairo)
 library(bigmemory)
 
 # Initialize global variables.
-ABSOLUTE_DATA_PATH <- "C:/Projects/kiva-map/data/"
-FILE_PATH <- "C:/Projects/kiva-map/images/kiva_points.png"
+ABSOLUTE_DATA_PATH <- "E:/Projects/kiva-map/data/"
+FILE_PATH <- "E:/Projects/kiva-map/images/kiva_points.png"
 LENDER_LOCATIONS_FILE_NAME <- "lender_locations"
 LOAN_LOCATIONS_FILE_NAME <- "loan_locations"
 WIDTH <- 4096
